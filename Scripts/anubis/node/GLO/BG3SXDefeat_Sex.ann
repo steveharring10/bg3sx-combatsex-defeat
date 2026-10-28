@@ -1,0 +1,114 @@
+game.actions.statusOverrides.AD_ACTION_CAPTOR_BG3SXDEFEAT_WALKTO = Action
+{
+    function()
+        local source = GetStatusSource(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_WALKTO")
+        if (source ~= nil and GetDistance2DTo(me, source) > 1.5) then
+            local moveResult = MoveTo(source, MovementSpeed.Run, true, false, 1.0, 1.5, false)
+            if moveResult ~= error.MovementError.None then
+                DebugText(me, "Debug: MoveTo failed or run out of resources")
+            end
+
+            SteerTo(source)
+        elseif (source ~= nil and not source.IsDead and not HasActiveStatus(me, "BG3SXDEFEAT_SEX_POSITIONS")) then
+            ApplyStatus(me, "BG3SXDEFEAT_SEX_TECHNICAL", true, -1)
+            ApplyStatus(source, "BG3SXDEFEAT_SEX_TECHNICAL", true, -1)
+            UseSpell("Target_BG3SXDefeat_Assault", source, nil, nil, nil, true, true, true)
+        end
+    end,
+
+    OnLeave = function()
+        RemoveStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_WALKTO")
+    end,
+
+    Valid = function(node)
+        return
+            HasActiveStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_WALKTO") and
+            not HasActiveStatus(me, "BG3SXDEFEAT_SEX_POSITIONS") and
+            not me.IsInCombat
+    end
+    ,
+    Priority = 487201
+}
+
+game.actions.statusOverrides.AD_ACTION_CAPTOR_BG3SXDEFEAT_SHOW_WALKTO = Action
+{
+    function()
+        local source = GetStatusSource(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_SHOW_WALKTO")
+        if (source ~= nil and GetDistance2DTo(me, source) > 1.5) then
+            local moveResult = MoveTo(source, MovementSpeed.Run, true, false, 1.0, 1.5, false)
+            if moveResult ~= error.MovementError.None then
+                DebugText(me, "Debug: MoveTo failed or run out of resources")
+            end
+
+            SteerTo(source)
+        elseif (source ~= nil and not source.IsDead and not HasActiveStatus(source, "AD_ACTION_VICTIM_BG3SXDEFEAT_SHOWTIME")) then
+
+            ApplyStatus(source, "AD_ACTION_VICTIM_BG3SXDEFEAT_SHOWTIME", true, 36, me)
+            local d = Dialog("BG3SXDEFEAT_AD_SHOW_1_22ba2d54-9581-5455-dd47-2259f99559be")
+            StartAutomatedDialog(d, true, me)
+            Sleep(5)
+        else
+            RemoveStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_SHOW_WALKTO")
+        end
+    end,
+
+    OnLeave = function()
+        RemoveStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_SHOW_WALKTO")
+    end,
+
+    Valid = function(node)
+        return
+            HasActiveStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_SHOW_WALKTO") and
+            not me.IsInCombat
+    end
+    ,
+    Priority = 487199
+}
+
+game.actions.statusOverrides.AD_ACTION_CAPTOR_BG3SXDEFEAT_BYSTANDER = Action
+{
+    function()
+        local source = GetStatusSource(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_BYSTANDER")
+        local cheerAnimation = Animation("CINE_Cheer_VictoriousFist_a2fba9da-dae8-4bd9-8a31-6de79f6a6422")
+        local clapAnimation = Animation("CINE_Cheer_AgreeClap_01_8775cd9a-9d7c-408b-aa4b-6a557f71e353")
+        local laughAnimation = Animation("CINE_Laugh_01_3b854156-3588-4178-acd7-e7aa6fda1fae")
+        local randomAnims = {cheerAnimation, clapAnimation, laughAnimation}
+
+        if (source ~= nil and GetDistance2DTo(me, source) > 4.5) then
+            local moveResult = MoveTo(source, MovementSpeed.Walk, false, false, 2.5, 4.5, false)
+            if moveResult ~= error.MovementError.None then
+                DebugText(me, "Debug: MoveTo failed or run out of resources")
+            end
+        elseif (source ~= nil and not source.IsDead) then
+            SteerTo(source)
+            local randomAnim = randomAnims[math.random(#randomAnims)]
+            if math.random() < 0.2 and not IsInDialog(me, false) then
+                if HasActiveStatus(source, "AD_ACTION_VICTIM_BG3SXDEFEAT_SEX_POSITIONS") or  HasActiveStatus(source, "AD_ACTION_VICTIM_BG3SXDEFEAT_MASTURBATE") then
+                    ApplyStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_DIALOG", true, 0, source)
+                end
+            end
+            PlayAnimation(randomAnim)
+            
+            -- if me.CanSpeak and not IsInDialog(me, false) then
+            --     StartCheckedAutomatedDialogRateLimitedImmediate(randomAD[math.random(#randomAD)], 1.0 + math.random() * 30, 20.0, false, me) 
+            -- end
+            Sleep(math.random(4,12))
+
+
+        else
+            RemoveStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_BYSTANDER")
+        end
+    end,
+
+    OnLeave = function()
+        StopAnimation(me)
+    end,
+
+    Valid = function(node)
+        return
+            HasActiveStatus(me, "AD_ACTION_CAPTOR_BG3SXDEFEAT_BYSTANDER") and
+            not me.IsInCombat
+    end
+    ,
+    Priority = 487200
+}

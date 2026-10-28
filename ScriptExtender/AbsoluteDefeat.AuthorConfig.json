@@ -1,0 +1,13 @@
+{
+    "FileVersion": 1,
+    "ModGuid": "a409431a-039c-493f-b8df-0573b7a9fc5c",
+    "Scenarios": [
+        {
+            "NameHandle": "h2f662c3ag9519g479ag980bg8029382d9011",
+            "Id": "SexScenario_5f97de42-a995-478d-abbf-8bec78bcb754",
+            "Weight": 25,
+            "TimeOut": 125,
+            "Situational": false
+        }
+    ]
+}

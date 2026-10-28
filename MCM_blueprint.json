@@ -1,0 +1,113 @@
+{
+    "SchemaVersion": 1,
+    "Optional": true,
+    "ModName": "BG3SXDefeat",
+    "ModDescription": "A defeat mod that makes use of the BG3SX framework.",
+    "Tabs": [
+        {
+            "TabName": "General",
+            "TabId": "general",
+            "Sections": [
+                {
+                    "SectionId": "general_settings",
+                    "SectionName": "General settings",
+                    "Handles": {
+                        "NameHandle": "h2bbf2449g3483g40e3g87a7g9c396b777a53"
+                    },
+                    "Settings": [
+                        {
+                            "Id": "exclude_tav",
+                            "Name": "Exclude Tav/Origin",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "If you only want your partymembers to get fucked while you lie dying (only works for singleplayer).",
+                            "Tooltip": "If you only want your partymembers to get fucked while you lie dying.",
+                            "Handles": {
+                                "DescriptionHandle": "h24ff96aegf996g4a6cga446g21282dd4a05f",
+                                "NameHandle": "ha278d902g52a5g4bddga0acg49955471e948"
+                            }
+                        },
+                        {
+                            "Id": "filter_prop_animations",
+                            "Name": "Block animations with props",
+                            "Type": "checkbox",
+                            "Default": false,
+                            "Description": "Prevent sex scenes from using animations that require props (furniture, pillories, etc.).",
+                            "Tooltip": "Prevent sex scenes from using animations that require props."
+                        },
+                        {
+                            "Id": "keep_armor",
+                            "Name": "Re-equip after defeat",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Your gear is re-equipped once the defeat scene ends.",
+                            "Tooltip": "Your gear is re-equipped once the defeat scene ends."
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "pairing_settings",
+                    "SectionName": "Gender pairings",
+                    "Settings": [
+                        {
+                            "Id": "pairing_mf",
+                            "Name": "Male victim / Female captor",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Allow female enemies to have their way with male victims.",
+                            "Tooltip": "Allow female enemies to have their way with male victims."
+                        },
+                        {
+                            "Id": "pairing_fm",
+                            "Name": "Female victim / Male captor",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Allow male enemies to have their way with female victims.",
+                            "Tooltip": "Allow male enemies to have their way with female victims."
+                        },
+                        {
+                            "Id": "pairing_mm",
+                            "Name": "Male victim / Male captor",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Allow male enemies to have their way with male victims.",
+                            "Tooltip": "Allow male enemies to have their way with male victims."
+                        },
+                        {
+                            "Id": "pairing_ff",
+                            "Name": "Female victim / Female captor",
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Allow female enemies to have their way with female victims.",
+                            "Tooltip": "Allow female enemies to have their way with female victims."
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "debug_settings",
+                    "SectionName": "Debug settings",
+                    "Handles": {
+                        "NameHandle": "h19d72aa4g5571g408fg99cfg15ea1934a72c"
+                    },
+                    "Settings": [
+                        {
+                            "Id": "debug_level",
+                            "Name": "Debug level",
+                            "Type": "slider_int",
+                            "Default": 0,
+                            "Description": "0 = no debug, 1 = minimal, 2 = verbose debug logs.",
+                            "Options": {
+                                "Min": 0,
+                                "Max": 2
+                            },
+                            "Handles": {
+                                "DescriptionHandle": "h67451888gbd71g466bg9830g548beeffe6db",
+                                "NameHandle": "haffe16b7g4db8g4f86gaab4gde1c3b87d16e"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
