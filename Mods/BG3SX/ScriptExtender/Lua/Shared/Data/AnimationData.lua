@@ -1,0 +1,258 @@
+-- AnimationSets.lua needs to be loaded before AnimationData.lua to create and allow reusing of animations by name
+if Ext.IsServer() then -- because this file is loaded through _initData.lua which is also loaded on the client
+    local anim = Data.AnimLinks
+
+    -- Heightmatching.lua needs to be loaded before AnimationData.lua to allow the functions to already exist.
+    Ext.Require("Shared/Data/Heightmatching.lua")
+    local hm = Heightmatching
+
+    Data.Animations = {}
+    local anims = Data.Animations
+    Data.IntroAnimations = {}
+    local intros = Data.IntroAnimations
+
+    local AnimationData = {}
+    AnimationData.__index = AnimationData
+    ---@class AnimationData
+    ---@field Heightmatching Heightmatching
+    function AnimationData.New(moduleUUID, name, animTop, animBtm, categories, props)
+        local instance
+        if moduleUUID then
+            instance = setmetatable({
+                Enabled = true,
+                Mod = moduleUUID,
+                Name = name,
+                Categories = categories or nil,
+                Heightmatching = hm:New(moduleUUID, name, animTop, animBtm),
+                Props = props or nil,
+                Duration = 3600,
+                Loop = true,
+                Sound = false,
+                SoundTop = nil,
+                SoundBottom = nil,
+            }, AnimationData)
+            instance._animTop = animTop
+            instance._animBtm = animBtm
+            return instance
+        else
+            Debug.Print("Creating an AnimationData metatable failed for animation " .. name .. ". Missing ModuleUUID!")
+        end
+    end
+
+    ---@return AnimationData|nil
+    function CreateAnimationData(moduleUUID, name, animTop, animBtm, categories, props)
+        animBtm = animBtm or nil
+        categories = categories or nil
+        props = props or nil
+
+        local animData = AnimationData.New(moduleUUID, name, animTop, animBtm, categories, props)
+
+        if categories and Table.Contains(categories, "NSFW") then -- If its an NSFW animation enable/add sound by default
+            animData.Sound = true
+            animData.SoundTop = Data.Sounds.Moaning
+            if Table.Contains(categories, "Lesbian") then
+                animData.SoundBottom = Data.Sounds.Kissing
+            else
+                animData.SoundBtm = Data.Sounds.Moaning
+            end
+        end
+
+        -- if animData then
+
+        --     Ext.Timer.WaitFor(100, function() -- To wait for mods editing their animation entry or adding their ModuleUUID before throwing the event
+        --         Ext.ModEvents.BG3SX.AddAnimation:Throw({animData})
+        --     end)
+
+        --     return animData
+        -- end
+        return animData
+    end
+
+    -- These 2 local functions need to be recreated by every modauthor wanting to add animations to our system
+    -- So new animation entries are actually added to a subtable named after their modUUID
+    
+    ---@return AnimationData|nil
+    local function addIntroAnim(name, animTop, animBtm, categories, props)
+        animBtm = animBtm or nil
+        categories = categories or nil
+        props = props or nil
+
+        if not intros[ModuleUUID] then
+            intros[ModuleUUID] = {}
+        end
+        if not intros[ModuleUUID][name] then
+            local anim = CreateAnimationData(ModuleUUID, name, animTop, animBtm, categories, props)
+            intros[ModuleUUID][name] = anim
+            return anim
+        else
+            Debug.Print("An animation with the name (" .. name .. ") already exists for this mod, please choose a different name or add an unique identifier")
+            return
+        end
+    end
+
+    ---@return AnimationData|nil
+    local function addMainAnim(name, animTop, animBtm, categories, props)
+        animBtm = animBtm or nil
+        categories = categories or nil
+        props = props or nil
+
+        if not anims[ModuleUUID] then
+            anims[ModuleUUID] = {}
+        end
+        if not anims[ModuleUUID][name] then
+            local anim = CreateAnimationData(ModuleUUID, name, animTop, animBtm, categories, props)
+            anims[ModuleUUID][name] = anim -- Add it to the BG3SX table
+            return anim
+        else
+            Debug.Print("An animation with the name (" .. name .. ") already exists for this mod, please choose a different name or add an unique identifier")
+            return
+        end
+    end
+
+    function Data.GetAnimDataParent(animationData)
+        for moduleUuid,modAnims in pairs(intros) do
+            for animName,animData in pairs(modAnims) do
+                if moduleUuid == animationData.Mod and animName == animationData.Name then
+                    return Data.IntroAnimations
+                end
+            end
+        end
+        for moduleUuid,modAnims in pairs(anims) do
+            for animName,animData in pairs(modAnims) do
+                if moduleUuid == animationData.Mod and animName == animationData.Name then
+                    return Data.Animations
+                end
+            end
+        end
+        return nil
+    end
+
+    -- Every other still gets shown, but these are the main categories we sort for
+    Data.AnimationCategories = {
+        "SFW", "NSFW", "Solo Penis", "Solo Vulva", "Masturbation", "Masturbate", "Paired", "Straight", "Same-Sex", "Lesbian", "Gay", "Vaginal", "Oral", "Anal", "Third-Wheel"
+    }
+    Data.GenitalTypes = {
+        "Regular", "Strap-On", "Strapon", "StrapOn", "Tentacle"
+    }
+
+    -- Animation Entries:
+    ----------------------------------------------------
+    -- Each of these is a metatable with additional parameters to set via object.Parameter, see AnimationData.New() -- Example: askForSex.Enabled = false
+    
+    -- Seperated from Data.Animations because these are the start spells which are handled differently and will create a scene
+    local sfwStart = addIntroAnim("Start SFW", anim["Start SFW"].MapKey, nil, {"SFW", "Solo"})
+    local startMasturbating = addIntroAnim("Start Masturbating", anim["MasturbateWank"].MapKey, anim["MasturbateStanding_V"].MapKey, {"NSFW", "SoloV", "SoloP", "Masturbation", "Masturbate"})
+    local hugOrCarry = addIntroAnim("Hug or Carry", anim["EmbraceTop"].MapKey, anim["EmbraceBtm"].MapKey, {"SFW", "Paired",})
+        
+    -- Setting up heightmatching matchups
+    local hmi = startMasturbating.Heightmatching or nil
+    if hmi then -- Solo animation only needs to specify one bodyIdentifier and one animation UUID, the second body has to be set to nil
+        hmi:SetAnimation("_P",  nil, anim["MasturbateWank"].MapKey)
+        --hmi:SetAnimation("Strong_P",  nil, anim["MasturbateWank"].MapKey) -- Animation doesn't exist - Anyone with a penis would play this regardless because of the previous entry
+        hmi:SetAnimation("_V",  nil, anim["MasturbateStanding_V"].MapKey)
+        hmi:SetAnimation("Strong_V",  nil, anim["MasturbateStanding_Tall_V"].MapKey) -- StrongF specific animation - Strong is what we call the "Strong" bodytype identifier
+    end
+
+    local hmi = hugOrCarry.Heightmatching
+    if hmi then -- Instead of a specific bodytype/gender combo, just the bodytype matchup also works
+        hmi:SetAnimation("Strong", "Med", anim["CarryingTop_Tall"].MapKey, anim["CarryingBtm_Med"].MapKey)
+        hmi:SetAnimation("Med", "Strong", anim["EmbraceBtm"].MapKey, anim["EmbraceTop"].MapKey)
+        -- If we'd reverse the entry with the commented out line, the same animation would play even if we use SwitchPlaces
+        -- Like this, if we initiate with Strong + Med, the carrying animation plays, if we use SwitchPlaces, the regular fallback plays
+    end
+
+    -- Additional Heightmatching Explanation
+    ----------------------------------
+    -- The way heightmatching animations get chosen is based on a Needleman-Wunsch algorithm
+    -- In short, this means we assign different values to specific genital/bodyType/bodyShape combinations based on which heightmatching matchups have been set up for a given animation
+    -- Meaning if it finds a good match based on some priorities within the matchup table and present bodies it uses the found matchup animation entries to play
+
+    -- When creating matchups, use a combination of these identifiers:
+    -- BodyType = {Strong, Med, Small, Tiny}
+    -- BodyShape = {M, F}
+    -- Genital = {_P, _V}
+
+    -- Examples:
+    -- StrongM_P, Strong_P, Strong, _P, M, Med_V, MedF_P, StrongF
+    -- etc.
+    -- But always write BodyType -> BodyShape -> Genital, from left to right, when you combine them!
+
+    local grinding = addMainAnim("Grinding", anim["ScissorTop"].MapKey, anim["ScissorBtm"].MapKey, {"NSFW", "Lesbian"})
+
+    local eatpussy = addMainAnim("EatPussy",  anim["EatOutTop"].MapKey, anim["EatOutBtm"].MapKey, {"NSFW", "Straight", "Lesbian", "Oral"})
+    eatpussy.SoundTop = Data.Sounds.Kissing
+
+    local fingerfuck = addMainAnim("FingerFuck",  anim["FingeringTop"].MapKey, anim["FingeringBtm"].MapKey, {"NSFW", "Straight", "Lesbian", "Gay", "Masturbation"})
+    fingerfuck.SoundTop = Data.Sounds.Kissing
+
+    local blowjob = addMainAnim("Blowjob",  anim["BlowjobTop"].MapKey, anim["BlowjobBtm"].MapKey, {"NSFW", "Straight", "Oral"})
+    blowjob.SoundTop = Data.Sounds.Kissing
+
+    local laying = addMainAnim("Laying",  anim["LayingTop"].MapKey, anim["LayingBtm"].MapKey, {"NSFW", "Straight", "Gay", "Vaginal", "Anal"})
+
+    local doggy = addMainAnim("Doggy",  anim["DoggyTop"].MapKey, anim["DoggyBtm"].MapKey, {"NSFW", "Straight", "Gay", "Vaginal", "Anal"})
+    
+    local cowgirl = addMainAnim("Cowgirl",  anim["CowgirlTop"].MapKey, anim["CowgirlBtm"].MapKey, {"NSFW", "Straight", "Gay", "Vaginal", "Anal"})
+    cowgirl.SoundBottom = Data.Sounds.Kissing
+
+    local milking = addMainAnim("Milking",  anim["MilkingTop"].MapKey, anim["MilkingBtm"].MapKey, {"NSFW", "Straight", "Gay"})
+    milking.SoundBottom = Data.Sounds.Kissing
+
+    local masturbateStanding = addMainAnim("Masturbate Standing", anim["MasturbateStanding_V"].MapKey, nil, {"NSFW", "SoloV"})
+
+    local wanking = addMainAnim("Wanking",  anim["MasturbateWank"].MapKey, nil, {"NSFW", "SoloP"})
+    wanking.SoundBottom = Data.Sounds.Kissing
+
+    local bottlesit = addMainAnim("BottleSit",  anim["BottleSit"].MapKey, nil, {"NSFW", "SoloV"}, {"0f2ccca6-3ce8-4271-aec0-820f6581c551"}) -- Prop: Bottle
+
+    local vampireThrust = addMainAnim("YOUR_LAST_THRUST",  anim["VampireLord"].MapKey, nil, {"Test"})
+
+    -- Heightmatching:
+    ----------------------------------------------------
+    local hmi = masturbateStanding.Heightmatching
+    if hmi then
+        hmi:SetAnimation("Strong_V",  nil, anim["MasturbateStanding_Tall_V"].MapKey)
+    end
+
+    local hmi = bottlesit.Heightmatching
+    if hmi then
+        hmi:SetAnimation("_V", nil, anim["BottleSit"].MapKey)
+    end
+
+    -- Automatic NSFW Tag adding
+    for uuid,modanims in pairs(anims) do
+        if uuid == ModuleUUID then -- Only for this mod
+            for name,animData in pairs(modanims) do
+                -- Debug.Print("Dump " .. name)
+                -- Debug.Dump(animData.Categories)
+                if not Table.Contains(animData.Categories, "NSFW") then
+                    table.insert(animData.Categories, "NSFW")
+                    -- _D(animData.Categories)
+                end
+                animData.SoundTop = Data.Sounds.Moaning
+                if animData._animBtm then
+                    if Table.Contains(animData.Categories, "Lesbian") then
+                        animData.SoundBottom = Data.Sounds.Kissing
+                    else
+                        animData.SoundBottom = Data.Sounds.Moaning
+                    end
+                end
+            end
+        end
+    end
+
+    -- Data.FilteredAnimations = {}
+    -- local filter = Data.FilteredAnimations
+    -- filter.Straight = {}
+    -- filter.Gay = {}
+    -- filter.Lesbian = {}
+    -- filter.Whatever = {}
+    -- function CreateAnimationFilter()
+    --     for AnimationName,Animation in pairs(Data.Animations) do
+    --         for Category in pairs(Animation.Categories) do
+    --             Debug.Print("Animation " .. AnimationName .. " is part of Categories " .. Category)
+    --         end
+    --     end
+    -- end
+    
+end

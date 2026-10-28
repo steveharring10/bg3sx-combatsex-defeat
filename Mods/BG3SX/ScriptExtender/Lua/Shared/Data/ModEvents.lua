@@ -1,0 +1,18 @@
+Data.ModEvents = {
+    "AddAnimation",
+    "StartSexSpellUsed",
+    "SexAnimationChange",
+    "SceneInit",
+    "SceneCreated",
+    "SceneDestroyed",
+    "SceneMove",
+    "ActorInit",
+    "ActorCreated",
+    "AnimationChange",
+    "SoundChange",
+    "SceneSwitchPlacesBefore",
+    "SceneSwitchPlacesAfter",
+    "CameraHeightChange",
+    "ActorDressed",
+    "GenitalChange",
+}
