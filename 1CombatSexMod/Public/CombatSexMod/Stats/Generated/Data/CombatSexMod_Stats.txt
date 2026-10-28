@@ -1,0 +1,52 @@
+new entry "CombatSex_Assaulted"
+type "StatusData"
+data "StatusType" "EFFECT"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+
+new entry "CombatSex_Stripped"
+type "StatusData"
+data "StatusType" "EFFECT"
+data "OnRemoveFunctors" "IF(RemoveCause(StatusRemoveCause.TimeOut)):ApplyStatus(CombatSex_Redress, 100, -1)"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+
+new entry "CombatSex_Redress"
+type "StatusData"
+data "StatusType" "EFFECT"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+
+new entry "CombatSex_Participant"
+type "StatusData"
+data "StatusType" "EFFECT"
+data "DisplayName" "f29a6e3b-710a-4215-90e3-c3b6adf29af5;1"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+data "RemoveEvents" "OnAttacked"
+
+new entry "CombatSex_Victim"
+using "CombatSex_Participant"
+
+new entry "CombatSex_Aggressor"
+using "CombatSex_Participant"
+data "OnRemoveFunctors" "IF(RemoveCause(StatusRemoveCause.TimeOut)):ApplyStatus(CombatSex_AssaultSuccess, 100, -1)"
+
+new entry "CombatSex_AssaultSuccess"
+using "CombatSex_Assaulted"
+
+new entry "CombatSex_Disabled"
+type "StatusData"
+data "StatusType" "BOOST"
+data "Icon" "CombatSex_Icon_Disabled"
+data "DisplayName" "4e463d7c-13e2-44f0-8b72-61a7a642697b;1"
+data "Description" "92f20472-2e14-4e80-a2c7-06b4f841fcd5;1"
+data "StatusPropertyFlags" "DisableOverhead;DisableCombatlog"
+
+new entry "CombatSex_PostSex"
+type "StatusData"
+data "StatusType" "BOOST"
+data "Boosts" "CannotHarmCauseEntity()"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+
+new entry "CombatSex_AssaultedDowned"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+data "Boosts" "AbilityFailedSavingThrow(Strength);AbilityFailedSavingThrow(Dexterity);CriticalHit(AttackTarget,Success,Always,2.5);IF(not DistanceToTargetGreaterThan(3)):Advantage(AttackTarget);IF(DistanceToTargetGreaterThan(3)):Disadvantage(AttackTarget);StatusImmunity(SG_Prone);StatusImmunity(SG_Condition);StatusImmunity(SHOCKWAVE)"

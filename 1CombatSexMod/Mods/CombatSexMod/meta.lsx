@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<save>
+  <version major="4" minor="0" revision="7" build="2" />
+  <region id="Config">
+    <node id="root">
+      <children>
+        <node id="Dependencies">
+          <children>
+            <node id="ModuleShortDesc">
+              <attribute id="Folder" type="LSString" value="BG3SX" />
+              <attribute id="MD5" type="LSString" value="" />
+              <attribute id="Name" type="LSString" value="BG3SX" />
+              <attribute id="UUID" type="FixedString" value="df8b9877-5662-4411-9d08-9ee2ec4d8d9e" />
+              <attribute id="Version64" type="int64" value="36732486608224256" />
+            </node>
+          </children>
+        </node>
+        <node id="ModuleInfo">
+          <attribute id="Author" type="LSWString" value="St8cy" />
+          <attribute id="CharacterCreationLevelName" type="FixedString" value="" />
+          <attribute id="Description" type="LSWString" value="Adds actions to trigger BG3SX scenes in and out of combat. BG3SX made by Skiz, Satan and Lune" />
+          <attribute id="Folder" type="LSWString" value="CombatSexMod" />
+          <attribute id="GMTemplate" type="FixedString" value="" />
+          <attribute id="LobbyLevelName" type="FixedString" value="" />
+          <attribute id="MD5" type="LSString" value="" />
+          <attribute id="MainMenuBackgroundVideo" type="FixedString" value="" />
+          <attribute id="MenuLevelName" type="FixedString" value="" />
+          <attribute id="Name" type="FixedString" value="CombatSexMod" />
+          <attribute id="NumPlayers" type="uint8" value="4" />
+          <attribute id="PhotoBooth" type="FixedString" value="" />
+          <attribute id="StartupLevelName" type="FixedString" value="" />
+          <attribute id="Tags" type="LSWString" value="" />
+          <attribute id="Type" type="FixedString" value="Add-on" />
+          <attribute id="UUID" type="FixedString" value="5ca05227-e47e-41b5-8c2e-5df83874b176" />
+          <attribute id="Version64" type="int64" value="36169536654802944" />
+          <children>
+            <node id="PublishVersion">
+              <attribute id="Version64" type="int64" value="36169536654802944" />
+            </node>
+            <node id="Scripts" />
+            <node id="TargetModes">
+              <children>
+                <node id="Target">
+                  <attribute id="Object" type="FixedString" value="Story" />
+                </node>
+              </children>
+            </node>
+          </children>
+        </node>
+      </children>
+    </node>
+  </region>
+</save>

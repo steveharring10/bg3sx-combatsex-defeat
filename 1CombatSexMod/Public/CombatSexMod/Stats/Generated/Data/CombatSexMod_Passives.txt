@@ -1,0 +1,17 @@
+new entry "CombatSex_Unassailable"
+type "PassiveData"
+data "DisplayName" "4e463d7c-13e2-44f0-8b72-61a7a642697b;1"
+data "Description" "92f20472-2e14-4e80-a2c7-06b4f841fcd5;1"
+data "Icon" "CombatSex_Icon_Disabled"
+data "Properties" "IsToggled;ToggledDefaultAddToHotbar"
+data "ToggleOnFunctors" "ApplyStatus(CombatSex_Disabled,100,-1)"
+data "ToggleOffFunctors" "RemoveStatus(CombatSex_Disabled)"
+
+new entry "CombatSex_Unsexable"
+type "PassiveData"
+data "Properties" "IsHidden"
+data "DisplayName" "3918c13f-11bf-47ad-8b56-ead63dd00c8e;1"
+
+new entry "CombatSex_KarlachEngine"
+type "PassiveData"
+data "Properties" "IsHidden"

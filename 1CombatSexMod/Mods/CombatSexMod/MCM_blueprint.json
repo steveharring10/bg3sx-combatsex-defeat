@@ -1,0 +1,103 @@
+{
+    "SchemaVersion": 1,
+    "Optional": true,
+    "ModName": "Combat Sex",
+    "ModDescription": "Adds sex during combat.",
+    "Tabs": [
+        {
+            "TabName": "General",
+            "TabId": "general",
+            "Sections": [
+                {
+                    "SectionId": "valueOptions",
+                    "SectionName": "Assault Value Options.",
+                    "Handles": {
+                        "NameHandle": "c8c67fa3-12b0-4b46-bb33-288e515733fe"
+                    },
+                    "Settings": [
+                        {
+                            "Id": "attitudeMulti",
+                            "Name": "Attitude Loss.",
+                            "Type": "slider_int",
+                            "Default": 20,
+                            "Description": "Amount of attitude/approval a character will lose when a player assaults them.",
+                            "Handles": {
+                                "NameHandle": "8ec13706-eaf7-4527-b4ac-dc9ef7fa7fb6",
+                                "DescriptionHandle": "41a663e7-a0b8-4dc2-b5df-b47d37aaa90f"
+                            },
+                            "Options": {
+                                "Min": 0,
+                                "Max": 100
+                            }
+                        },
+                        {
+                            "Id": "durationMulti",
+                            "Name": "Assault Duration.",
+                            "Type": "slider_int",
+                            "Default": 1,
+                            "Description": "Number of turns an assault lasts.",
+                            "Handles": {
+                                "NameHandle": "76f1d795-1ad5-44d6-b405-f4597933cb87",
+                                "DescriptionHandle": "64dcd367-f1a5-48b4-8471-13d7273c0ea8"
+                            },
+                            "Options": {
+                                "Min": 1,
+                                "Max": 10
+                            }
+                        },
+                        {
+                            "Id": "assaultChance",
+                            "Name": "Assault Chance.",
+                            "Type": "slider_int",
+                            "Default": 0,
+                            "Description": "Random chance an NPC triggers an assault.",
+                            "Handles": {
+                                "NameHandle": "cef37b4c-2ede-4bf3-9160-c90588f762fb",
+                                "DescriptionHandle": "3b371416-091c-4a7d-9fd8-055ee7875d5d"
+                            },
+                            "Options": {
+                                "Min": 0,
+                                "Max": 100
+                            }
+                        },
+                        {
+                            "Id": "assaultDamage",
+                            "Name": "Assault Damage Threshold.",
+                            "Type": "slider_int",
+                            "Default": 999,
+                            "Description": "NPC damage over this amount triggers an assault.",
+                            "Handles": {
+                                "NameHandle": "f2145324-c2d9-4583-93a7-423199ab59c9",
+                                "DescriptionHandle": "f77a96f3-f811-4b26-aa98-8d8b6c044dd3"
+                            },
+                            "Options": {
+                                "Min": 1,
+                                "Max": 999
+                            }
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "debugOptions",
+                    "SectionName": "Debug Options.",
+                    "Handles": {
+                        "NameHandle": "d4c94dea-222a-4e54-a4a9-5957675fc76d"
+                    },
+                    "Settings": [
+                        {
+                            "Id": "karlachEngine",
+                            "Name": "Repair Karlach's Engine (Requires reload).",
+                            "Type": "checkbox",
+                            "Default": false,
+                            "Description": "Set Karlach's engine as repaired if Karlach's act 2 engine repair scene has already been played.",
+                            "Handles": {
+                                "NameHandle": "caa3c144-0d10-416b-bbcc-11755d6f3a26",
+                                "DescriptionHandle": "42379f27-797b-4c7f-90a4-67583b92a684"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
